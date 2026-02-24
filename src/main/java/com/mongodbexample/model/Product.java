@@ -10,7 +10,7 @@ public class Product{
 	private Object price;
 	private Rating rating;
 	private String description;
-	private int id;
+	private String id;
 	private String title;
 	private String category;
 }

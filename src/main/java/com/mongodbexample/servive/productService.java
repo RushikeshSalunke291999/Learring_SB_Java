@@ -13,7 +13,7 @@ public class productService {
     private final productRepository productRepository;
     private final WebClient webClient;
 
-    public productService(productRepository productRepository, WebClient.Builder webClint) {
+    public productService(productRepository productRepository, WebClient.Builder webClient) {
         this.productRepository = productRepository;
         this.webClient = WebClient.builder().baseUrl("https://fakestoreapi.com").build();
     }
@@ -61,5 +61,16 @@ public class productService {
             throw new ProductSyncException("Error while getting products by category" + e.getMessage());
         }
         return productRepository.findByCategory(category);
+    }
+
+    public Product getProductById(String id) {
+        try {
+            if(id == null || id.trim().isEmpty()){
+                throw new ProductSyncException("Product Id is required");
+            }
+            return productRepository.findById(id).orElse(null);
+        }catch(Exception e){
+            throw new ProductSyncException("Error while getting product by id" + e.getMessage());
+        }
     }
 }
