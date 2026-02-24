@@ -35,3 +35,22 @@ out/
 
 ### VS Code ###
 .vscode/
+# Gradle
+.gradle/
+build/
+out/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# (Optional) keep local secrets out
+application-local.properties
+.env

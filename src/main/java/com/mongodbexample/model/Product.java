@@ -1,7 +1,9 @@
 package com.mongodbexample.model;
 
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "product")
 @Data
 public class Product{
 	private String image;
