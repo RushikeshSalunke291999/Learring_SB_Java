@@ -3,17 +3,21 @@ package com.mongodbexample.servive;
 import com.mongodbexample.exception.ProductSyncException;
 import com.mongodbexample.model.Product;
 import com.mongodbexample.repository.productRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
 
 @Service
-public class productService {
+public class ProductService {
 
     private final productRepository productRepository;
     private final WebClient webClient;
 
-    public productService(productRepository productRepository, WebClient.Builder webClient) {
+    private static final Logger logger = LoggerFactory.getLogger(Product.class);
+
+    public ProductService(productRepository productRepository, WebClient.Builder webClient) {
         this.productRepository = productRepository;
         this.webClient = WebClient.builder().baseUrl("https://fakestoreapi.com").build();
     }
@@ -29,7 +33,7 @@ public class productService {
 
             if (allProduct != null) {
                 productRepository.saveAll(allProduct);
-                System.out.println("Products " + allProduct.size() + " saved successfully");
+                logger.debug("Fetched all {} products", allProduct.size());
             }
         } catch (Exception e) {
             throw new ProductSyncException("Error while fetching products" + e.getMessage());
