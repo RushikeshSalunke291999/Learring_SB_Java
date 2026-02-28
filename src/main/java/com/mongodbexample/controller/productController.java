@@ -1,22 +1,33 @@
 package com.mongodbexample.controller;
 
 import com.mongodbexample.model.Product;
-import com.mongodbexample.servive.productService;
-import jakarta.annotation.Resource;
+import com.mongodbexample.process.InventoryAlertService;
+import com.mongodbexample.process.discountScheduler;
+import com.mongodbexample.repository.productRepository;
+import com.mongodbexample.servive.ProductService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class productController {
+    @Autowired
+    private productRepository productRepository;
 
-    @Resource
-    private productService productService;
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private discountScheduler discountScheduler;
+
+    @Autowired
+    private InventoryAlertService inventoryAlertService;
 
     @GetMapping("/products")
     public String syncProducts() {
@@ -37,5 +48,15 @@ public class productController {
     @GetMapping("/ProductById/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable String id) {
         return ResponseEntity.ok(productService.getProductById(id));
+    }
+
+    @GetMapping("/DiscountedProducts")
+    public ResponseEntity<List<Product>> getDiscountedProducts() {
+        return ResponseEntity.ok(discountScheduler.midNightDiscount());
+    }
+
+    @GetMapping("/InventoryAlert")
+    public ResponseEntity<List<Product>> getInventoryAlert() {
+        return ResponseEntity.ok(inventoryAlertService.getLowStockProducts(5));
     }
 }

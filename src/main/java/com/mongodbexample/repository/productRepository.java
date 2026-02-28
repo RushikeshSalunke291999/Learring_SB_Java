@@ -12,4 +12,10 @@ public interface productRepository extends MongoRepository<Product, String> {
 
     @Query("{ 'category' : ?0 }")
     List<Product> findByCategory(String category);
+
+    @Query("{ 'qty': { $lt: ?0 } }")
+    List<Product> findByQtyLessThan(int i);
+
+    @Query(value = "{ 'isDeleted': true }", delete = true)
+    void deleteByIsDeletedTrue();
 }
